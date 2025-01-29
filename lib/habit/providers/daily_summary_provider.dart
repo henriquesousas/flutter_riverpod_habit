@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/providers/database_provider.dart';
+import 'package:habit/habit/providers/database_provider.dart';
 
 final dailySummaryProvider =
     StreamProvider.family<(int completedTaks, int totalTasks), DateTime>(
@@ -8,3 +8,7 @@ final dailySummaryProvider =
     return database.watchDailySummary(date);
   },
 );
+
+final selectedDateProvider = StateProvider<DateTime>((ref) {
+  return DateTime.now(); // Initial value
+});

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit/database/database.dart';
 
-import 'package:habit/habit_page.dart';
-import 'package:habit/providers/database_provider.dart';
+import 'package:habit/habit/views/habit_page.dart';
+import 'package:habit/habit/providers/database_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

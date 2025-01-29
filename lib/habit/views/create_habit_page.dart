@@ -1,8 +1,7 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/database/database.dart';
-import 'package:habit/providers/database_provider.dart';
+import 'package:habit/habit/domain/create_habit_dto.dart';
+import 'package:habit/habit/providers/view_model_providers.dart';
 
 class CreateHabitPage extends ConsumerStatefulWidget {
   const CreateHabitPage({super.key});
@@ -22,23 +21,22 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final viewModel = ref.watch(habitViewModelProvider.notifier);
 
     Future<void> onPressed() async {
       final title = habitTitleController.text;
-      final descrption = habitDescriptionController.text;
+      final description = habitDescriptionController.text;
 
       if (title.isEmpty) return;
-      if (descrption.isEmpty) return;
+      if (description.isEmpty) return;
 
-      final habit = HabitsCompanion.insert(
-        title: title,
-        description: descrption,
-        isDaily: drift.Value(isDaily),
-        createdAt: drift.Value(DateTime.now()),
-        reminderTime: drift.Value(reminderTime.format(context)),
-      );
+      final habit = CreateHabitDto(
+          title: title,
+          description: description,
+          isDaily: isDaily,
+          reminderTime: reminderTime.format(context));
 
-      await ref.read(databaserProvider).createHabit(habit);
+      await viewModel.createHabit(habit);
       if (context.mounted) Navigator.of(context).pop();
     }
 
@@ -130,3 +128,4 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
     );
   }
 }
+//

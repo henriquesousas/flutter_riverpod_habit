@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/components/daily_summary_card.dart';
-import 'package:habit/create_habit_page.dart';
-import 'package:habit/components/habit_card_list.dart';
-import 'package:habit/components/timeline_view.dart';
-import 'package:habit/extensions/date_extension.dart';
-import 'package:habit/providers/daily_summary_provider.dart';
+import 'package:habit/habit/views/components/daily_summary_card.dart';
+import 'package:habit/habit/views/create_habit_page.dart';
+import 'package:habit/habit/views/components/habit_card_list.dart';
+import 'package:habit/habit/views/components/timeline_view.dart';
+import 'package:habit/core/extensions/date_extension.dart';
+import 'package:habit/habit/providers/daily_summary_provider.dart';
 
-final selectedDateProvider = StateProvider<DateTime>((ref) {
-  return DateTime.now();
-});
+// final selectedDateProvider = StateProvider<DateTime>((ref) {
+//   return DateTime.now();
+// });
 
 class HabitPage extends ConsumerStatefulWidget {
   const HabitPage({super.key});
@@ -22,7 +22,6 @@ class _MainPageState extends ConsumerState<HabitPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     final selectedDate = ref.watch(selectedDateProvider);
 
     return Scaffold(
