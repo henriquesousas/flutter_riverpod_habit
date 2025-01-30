@@ -1,5 +1,5 @@
-import 'package:habit/habit/data/habit_repository.dart';
-import 'package:habit/habit/domain/create_habit_dto.dart';
+import 'package:habit/habit/domain/repository/habit_repository.dart';
+import 'package:habit/habit/domain/dtos/create_habit_dto.dart';
 import 'package:result_dart/result_dart.dart';
 
 class CreateHabitUseCase {

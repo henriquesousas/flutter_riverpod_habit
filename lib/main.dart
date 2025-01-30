@@ -1,10 +1,10 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/database/database.dart';
+import 'package:habit/core/database/database.dart';
 
 import 'package:habit/habit/views/habit_page.dart';
-import 'package:habit/habit/providers/database_provider.dart';
+import 'package:habit/habit/views/providers/database_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

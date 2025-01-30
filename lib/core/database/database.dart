@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:habit/database/tables.dart';
+import 'package:habit/core/database/tables.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,11 +16,11 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future<List<Habit>> getHabits() => select(habits).get();
+  // Future<List<Habit>> getHabits() => select(habits).get();
 
-  Stream<List<Habit>> watchHabits() => select(habits).watch();
+  // Stream<List<Habit>> watchHabits() => select(habits).watch();
 
-  Future<int> createHabit(HabitsCompanion habit) => into(habits).insert(habit);
+  // Future<int> createHabit(HabitsCompanion habit) => into(habits).insert(habit);
 
   Stream<List<HabitWithCompletion>> watchHabitsForDate(DateTime date) {
     final startOfDay = DateTime(date.year, date.month, date.day);
@@ -51,42 +51,42 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Future<void> completedHabits(int habitId, DateTime selectedDate) async {
-    await transaction(
-      () async {
-        final startOfDay =
-            DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+  // Future<void> completedHabits(int habitId, DateTime selectedDate) async {
+  //   await transaction(
+  //     () async {
+  //       final startOfDay =
+  //           DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
-        final endOfDay = DateTime(selectedDate.year, selectedDate.month,
-            selectedDate.day, 23, 59, 59, 999);
+  //       final endOfDay = DateTime(selectedDate.year, selectedDate.month,
+  //           selectedDate.day, 23, 59, 59, 999);
 
-        final existingCompletion = await (select(habitsCompletions)
-              ..where((tbl) =>
-                  tbl.habitId.equals(habitId) &
-                  tbl.completedAt
-                      .isBetween(Variable(startOfDay), Variable(endOfDay))))
-            .get();
+  //       final existingCompletion = await (select(habitsCompletions)
+  //             ..where((tbl) =>
+  //                 tbl.habitId.equals(habitId) &
+  //                 tbl.completedAt
+  //                     .isBetween(Variable(startOfDay), Variable(endOfDay))))
+  //           .get();
 
-        if (existingCompletion.isEmpty) {
-          await into(habitsCompletions).insert(HabitsCompletionsCompanion(
-            habitId: Value(habitId),
-            completedAt: Value(selectedDate),
-          ));
+  //       if (existingCompletion.isEmpty) {
+  //         await into(habitsCompletions).insert(HabitsCompletionsCompanion(
+  //           habitId: Value(habitId),
+  //           completedAt: Value(selectedDate),
+  //         ));
 
-          final habit = await (select(habits)
-                ..where((t) => t.id.equals(habitId)))
-              .getSingle();
+  //         final habit = await (select(habits)
+  //               ..where((t) => t.id.equals(habitId)))
+  //             .getSingle();
 
-          await update(habits) //
-              .replace(habit
-                  .copyWith(
-                      streak: habit.streak + 1,
-                      totalCompletions: habit.totalCompletions + 1)
-                  .toCompanion(true));
-        }
-      },
-    );
-  }
+  //         await update(habits) //
+  //             .replace(habit
+  //                 .copyWith(
+  //                     streak: habit.streak + 1,
+  //                     totalCompletions: habit.totalCompletions + 1)
+  //                 .toCompanion(true));
+  //       }
+  //     },
+  //   );
+  // }
 
   Stream<(int, int)> watchDailySummary(DateTime date) {
     final startOfDay = DateTime(date.year, date.month, date.day);
@@ -103,7 +103,10 @@ class AppDatabase extends _$AppDatabase {
       completionsStream,
       habitsStream,
       (completions, habits) => (completions.length, habits.length),
-    );
+    ).asyncMap((result) async {
+      await Future.delayed(const Duration(milliseconds: 500));
+      return result;
+    });
   }
 }
 

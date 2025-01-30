@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/habit/providers/view_model_providers.dart';
+import 'package:habit/habit/views/providers/view_model_providers.dart';
 import 'package:habit/habit/views/components/habit_card.dart';
 
 class HabitCardList extends ConsumerStatefulWidget {
@@ -41,13 +41,13 @@ class _HabitCardListState extends ConsumerState<HabitCardList> {
     final habitsAsyncValue = ref.watch(habitViewModelProvider);
 
     return habitsAsyncValue.when(
-        data: (habits) => Expanded(
+        data: (state) => Expanded(
               child: ListView.separated(
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 16),
-                itemCount: habits.length,
+                itemCount: state.habits?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final habitWithCompletion = habits[index];
+                  final habitWithCompletion = state.habits![index];
                   return HabitCard(
                     habitId: habitWithCompletion.habit.id,
                     title: habitWithCompletion.habit.title,

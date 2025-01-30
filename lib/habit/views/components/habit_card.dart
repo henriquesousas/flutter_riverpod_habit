@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/habit/providers/database_provider.dart';
+import 'package:habit/habit/views/providers/view_model_providers.dart';
 
 class HabitCard extends ConsumerWidget {
   final int habitId;
@@ -25,7 +25,8 @@ class HabitCard extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     Future<void> onComplete() async {
-      await ref.read(databaserProvider).completedHabits(habitId, date);
+      ref.read(habitViewModelProvider.notifier).completedHabit(habitId, date);
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Habit completed'),

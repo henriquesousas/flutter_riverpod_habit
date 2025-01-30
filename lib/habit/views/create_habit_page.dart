@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habit/habit/domain/create_habit_dto.dart';
-import 'package:habit/habit/providers/view_model_providers.dart';
+import 'package:habit/habit/domain/dtos/create_habit_dto.dart';
+import 'package:habit/habit/views/providers/view_model_providers.dart';
 
 class CreateHabitPage extends ConsumerStatefulWidget {
   const CreateHabitPage({super.key});
