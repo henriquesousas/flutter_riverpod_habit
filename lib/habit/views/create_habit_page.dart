@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit/core/extensions/date_extension.dart';
+import 'package:habit/core/ui/components/primary_button.dart';
+import 'package:habit/core/ui/components/primary_text_field.dart';
 import 'package:habit/habit/domain/dtos/create_habit_dto.dart';
 import 'package:habit/habit/views/providers/view_model_providers.dart';
 
@@ -15,17 +18,17 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
   var isDaily = false;
   var hasReminder = false;
   var reminderTime = const TimeOfDay(hour: 10, minute: 0);
-  var habitTitleController = TextEditingController();
-  var habitDescriptionController = TextEditingController();
+  var titleController = TextEditingController();
+  var descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
     final viewModel = ref.watch(habitViewModelProvider.notifier);
 
     Future<void> onPressed() async {
-      final title = habitTitleController.text;
-      final description = habitDescriptionController.text;
+      final title = titleController.text;
+      final description = descriptionController.text;
 
       if (title.isEmpty) return;
       if (description.isEmpty) return;
@@ -45,7 +48,7 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
         title: Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.chevron_left),
             ),
             Text(
@@ -59,73 +62,73 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          spacing: 24,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              controller: habitTitleController,
-              decoration: const InputDecoration(labelText: "habit title"),
-            ),
-            TextFormField(
-              controller: habitDescriptionController,
-              decoration: const InputDecoration(labelText: "habit description"),
-            ),
-            const Text("Goals"),
-            Row(
-              children: [
-                const Text("Daily"),
-                Switch(
-                  value: isDaily,
-                  onChanged: (value) {
-                    setState(() {
-                      isDaily = value;
-                    });
-                  },
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("Titulo", style: Theme.of(context).textTheme.labelLarge),
+              PrimaryTextField(
+                controller: titleController,
+                hintText: "titulo hábito...",
+              ),
+              Text("Descricao", style: Theme.of(context).textTheme.labelLarge),
+              PrimaryTextField(
+                controller: descriptionController,
+                hintText: "descrição do hábito...",
+                maxLine: 4,
+              ),
+              SwitchListTile(
+                contentPadding: const EdgeInsets.only(left: 5),
+                secondary: const Icon(Icons.timer_outlined),
+                value: hasReminder,
+                title: Text(
+                  "Lembrete",
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-              ],
-            ),
-            const Text("Reminder"),
-            SwitchListTile(
-              value: hasReminder,
-              title: const Text("Has reminder"),
-              subtitle: hasReminder ? Text(reminderTime.toString()) : null,
-              onChanged: (value) {
-                setState(
-                  () {
-                    hasReminder = value;
-                    if (value) {
-                      showTimePicker(
-                        context: context,
-                        initialTime: reminderTime,
-                      ).then(
-                        (time) {
+                subtitle:
+                    hasReminder ? Text(reminderTime.toFormattedString()) : null,
+                onChanged: (isSelected) {
+                  if (!isSelected) {
+                    setState(() {
+                      hasReminder = isSelected;
+                    });
+                  }
+
+                  if (isSelected) {
+                    showTimePicker(
+                      context: context,
+                      initialTime: reminderTime,
+                    ).then(
+                      (time) {
+                        setState(() {
                           if (time != null) {
+                            hasReminder = isSelected;
                             reminderTime = time;
                           }
-                        },
-                      );
-                    }
-                  },
-                );
-              },
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                ),
-                child: const Text("Create habit"),
+                        });
+                      },
+                    );
+                  }
+                },
               ),
-            )
-          ],
+              PrimaryButton(onPressed: onPressed),
+              const SizedBox(height: 5),
+              Visibility(
+                visible: hasReminder,
+                child: Text(
+                  "Com o lembrete ativado, não se preocupe que lembraremos a você quando chegar a hora.",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Colors.grey.shade500,
+                      ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-//

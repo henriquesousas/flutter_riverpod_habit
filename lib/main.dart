@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Habito',
-      darkTheme: FlexThemeData.dark(scheme: FlexScheme.shark),
+      darkTheme: FlexThemeData.dark(scheme: FlexScheme.amber),
       themeMode: ThemeMode.dark,
       home: const HabitPage(),
     );
