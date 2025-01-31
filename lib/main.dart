@@ -5,9 +5,12 @@ import 'package:habit/core/database/database.dart';
 
 import 'package:habit/habit/views/habit_page.dart';
 import 'package:habit/habit/views/providers/database_provider.dart';
+import 'package:habit/push_notification_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  PushNotificationService().initialize();
+
   final database = AppDatabase();
   runApp(ProviderScope(
       overrides: [databaserProvider.overrideWithValue(database)],

@@ -51,6 +51,10 @@ dependencies:
   path: ^1.9.0
   path_provider: ^2.1.5
   rxdart: ^0.28.0
+  # https://pub.dev/packages/flutter_local_notifications/install
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
+  flutter_timezone: ^4.0.0
 
 dev_dependencies:
   flutter_test:
